@@ -1,22 +1,25 @@
 package com.example.hp.quizapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
-    // TODO: Declare constants here
-
-
     // TODO: Declare member variables here:
     Button mTrueButton;
     Button mFalsebutton;
     TextView mQuestionTextView;
+    TextView mScoreTextView;
+    ProgressBar mProgressBar;
     int mIndex;
+    int mScore;
     int mQuesion;
 
     // creating question bank array mQuestionBank with their Correct answer and work as Constructor
@@ -36,6 +39,9 @@ public class MainActivity extends Activity {
             new TrueFalse(R.string.question_13,true)
     };
 
+    // Declare constants here for progrss in progressbar
+    final int PROGRESS_BAR_INCRIMENT = (int) Math.ceil(100.0 / mQuestionBank.length);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +50,10 @@ public class MainActivity extends Activity {
         mTrueButton = (Button) findViewById(R.id.true_button);
         mFalsebutton = (Button) findViewById(R.id.false_button);
         mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
+        mScoreTextView = (TextView) findViewById(R.id.score);
+        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
+        mScoreTextView.setText("Score " + mScore + "/" + mQuestionBank.length);
         mQuesion = mQuestionBank[mIndex].getQuestionID();
         mQuestionTextView.setText(mQuesion);
 
@@ -69,8 +78,25 @@ public class MainActivity extends Activity {
 
     private void updateQuestion(){
         mIndex = (mIndex + 1) % mQuestionBank.length;
+
+        if(mIndex==0){
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.setCancelable(false);
+            alert.setTitle("Quiz Completed");
+            alert.setMessage("Your Scored " + mScore +" points!");
+            alert.setPositiveButton("Close Quiz", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            });
+            alert.show();
+        }
+
         mQuesion = mQuestionBank[mIndex].getQuestionID();
         mQuestionTextView.setText(mQuesion);
+        mScoreTextView.setText("Score " + mScore + "/" + mQuestionBank.length);
+        mProgressBar.incrementProgressBy(PROGRESS_BAR_INCRIMENT);
     }
 
     private void cheakAnswer(boolean userSelection){
@@ -78,6 +104,7 @@ public class MainActivity extends Activity {
 
         if(userSelection==correctAnswer){
             Toast.makeText(getApplicationContext(),R.string.correct_toast,Toast.LENGTH_SHORT).show();
+            mScore = mScore + 1;
         }
         else {
             Toast.makeText(getApplicationContext(),R.string.incorrect_toast,Toast.LENGTH_SHORT).show();
