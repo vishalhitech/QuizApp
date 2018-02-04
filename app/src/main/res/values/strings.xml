@@ -3,12 +3,13 @@
 
     <string name="true_button">True</string>
     <string name="false_button">False</string>
-    <string name="initial_score">Score 0/13</string>
+    <string name="initial_score">Score 0/All</string>
 
 
     <string name="incorrect_toast">Wrong!</string>
     <string name="correct_toast">You got it!</string>
 
+    <string name="question">Your Question\'s are Displayed here.</string>
     <string name="question_1">Valentine\'s day is banned in Saudi Arabia.</string>
     <string name="question_2">A slug\'s blood is green.</string>
     <string name="question_3">Approximately one quarter of human bones are in the feet.</string>
